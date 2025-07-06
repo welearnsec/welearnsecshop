@@ -15,7 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $hashed = md5($password);
 
     // intentionally vulnerable: raw SQL, no prepared statements
-    $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$hashed'";
+
+$sql = "SELECT * FROM users WHERE (username = '$username' OR email = '$username') AND password = '$hashed'";
     $result = $conn->query($sql);
 
     if ($result && $result->num_rows === 1) {
@@ -55,16 +56,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="alert alert-danger"><?= $message ?></div>
     <?php endif; ?>
     <form method="post">
-      <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input type="text" required name="username" class="form-control" id="username">
-      </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" required name="password" class="form-control" id="password">
-      </div>
-      <button type="submit" class="btn btn-primary">Login</button>
-    </form>
+  <div class="mb-3">
+    <label for="username" class="form-label">Username/Email</label>
+    <input type="text" required name="username" class="form-control" id="username">
+  </div>
+  <div class="mb-3">
+    <label for="password" class="form-label">Password</label>
+    <input type="password" required name="password" class="form-control" id="password">
+  </div>
+  <div class="mb-3">
+    <a href="reset.php">Forgot your password?</a>
+  </div>
+  <button type="submit" class="btn btn-primary">Login</button>
+</form>
+
   </div>
 
   <?php include 'includes/footer.php'; ?>

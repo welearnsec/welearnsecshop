@@ -7,6 +7,10 @@ $product_id = intval($product_id);
 // get product info
 $productRes = $conn->query("SELECT * FROM products WHERE id=$product_id");
 $product = $productRes->fetch_assoc();
+if (!$product) {
+    die("Product not found.");
+}
+
 
 // handle new review submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

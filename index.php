@@ -40,7 +40,9 @@ $result = $conn->query($sql);
               <h5 class="card-title"><?=htmlspecialchars($row['name'])?></h5>
               <p class="card-text"><?=htmlspecialchars($row['description'])?></p>
               <p class="card-text"><strong>$<?=number_format($row['price'],2)?></strong></p>
-              <a href="product.php?id=<?=$row['id']?>" class="btn btn-primary mt-auto">View</a>
+             <a href="product.php?id=<?=$row['id']?>" class="btn btn-primary mt-auto mb-2">View</a>
+<a href="reviews.php?id=<?=$row['id']?>" class="btn btn-outline-secondary">Leave a Review</a>
+
             </div>
           </div>
         </div>

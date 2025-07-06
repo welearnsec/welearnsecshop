@@ -7,17 +7,32 @@ $message = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
+$email = $_POST['email'] ?? '';
 
     // intentionally weak: no password policy, no prepared statements, MD5 hashing
     $hashed = md5($password); 
 
-    $sql = "INSERT INTO users (username, password) VALUES ('$username', '$hashed')";
-    if ($conn->query($sql)) {
-        $message = "Account created successfully. <a href='login.php'>Login here</a>.";
+  // check if username exists
+
+$checkUser = $conn->query("SELECT id FROM users WHERE username='$username'");
+if ($checkUser->num_rows > 0) {
+    $message = "Username already taken. Please choose another.";
+} else {
+    // check if email exists
+    $checkEmail = $conn->query("SELECT id FROM users WHERE email='$email'");
+    if ($checkEmail->num_rows > 0) {
+        $message = "Email already registered. Please use another email.";
     } else {
-        $message = "Error: " . $conn->error;
+        $sql = "INSERT INTO users (username, email, password) VALUES ('$username', '$email', '$hashed')";
+        if ($conn->query($sql)) {
+            $message = "Account created successfully. <a href='login.php'>Login here</a>.";
+        } else {
+            $message = "Error: " . $conn->error;
+        }
     }
 }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,17 +50,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php if($message): ?>
       <div class="alert alert-info"><?= $message ?></div>
     <?php endif; ?>
-    <form method="post">
-      <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input type="text" required name="username" class="form-control" id="username">
-      </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" required name="password" class="form-control" id="password">
-      </div>
-      <button type="submit" class="btn btn-primary">Register</button>
-    </form>
+   <form method="post">
+  <div class="mb-3">
+    <label for="username" class="form-label">Username</label>
+    <input type="text" required name="username" class="form-control" id="username">
+  </div>
+  <div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input type="email" required name="email" class="form-control" id="email">
+  </div>
+  <div class="mb-3">
+    <label for="password" class="form-label">Password</label>
+    <input type="password" required name="password" class="form-control" id="password">
+  </div>
+  <button type="submit" class="btn btn-primary">Register</button>
+</form>
+
   </div>
 
     <?php include 'includes/footer.php'; ?>
