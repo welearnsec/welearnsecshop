@@ -28,13 +28,22 @@ This site includes common OWASP Top 10 vulnerabilities and other business logic 
 - Cross-Site Request Forgery (CSRF)
 - Local File Inclusion (LFI)
 - Remote File Inclusion (RFI)
+- Directory Traversal
+- Reflected File Download (RFD)
 - Broken Access Control
 - Weak session handling
 - Insecure direct object references (IDOR)
 - XML External Entity Injection (XXE)
 - Server-Side Request Forgery (SSRF)
-- Business logic flaws (e.g. missing verification)
+- Security misconfiguration
+- Sensitive data exposure (e.g. plaintext passwords)
+- Error-based user enumeration
+- Default credentials
+- Missing clickjacking protection
+- Insufficient logging & monitoring
 - Insecure file upload
+- Business logic flaws (e.g. missing verification, price tampering)
+- Race condition
 
 ---
 

@@ -1,21 +1,17 @@
 <?php
-require_once '../includes/config.php';
+require_once 'includes/config.php';
 
 $message = "";
 $response = "";
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $trackingUrl = $_POST['tracking_url'] ?? '';
+$trackingUrl = $_POST['tracking_url'] ?? '';
 
-    // intentionally vulnerable to SSRF
+if (!empty($trackingUrl)) {
     $response = @file_get_contents($trackingUrl);
-
-    if ($response !== false) {
-        $message = "Tracking data fetched successfully!";
-    } else {
-        $message = "Could not fetch tracking data.";
-    }
+} else {
+    $response = "Error: Tracking URL cannot be empty.";
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
   <!-- Navbar -->
-    <?php require_once "../includes/admin_navbar.php";?>
+    <?php require_once "includes/navbar.php";?>
 
   <div class="container mt-5">
     <h2>Track Customer Order</h2>

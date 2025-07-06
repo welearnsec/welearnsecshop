@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $quantity = intval($_POST['quantity']);
     $price = floatval($_POST['price']); // hidden field!
     
-    // store directly in session
     $_SESSION['cart'][] = [
         'product_id' => $product['id'],
         'name' => $product['name'],
@@ -35,28 +34,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="UTF-8">
   <title><?=htmlspecialchars($product['name'])?> - WeLearnSec Shop</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .card-img-top {
+      height: 300px;
+      object-fit: cover;
+      background: #f8f8f8;
+    }
+  </style>
 </head>
 <body>
-  <!-- Navbar -->
-     <?php include 'includes/navbar.php'; ?>
+  <?php include 'includes/navbar.php'; ?>
 
   <div class="container mt-5">
-    <h2><?=htmlspecialchars($product['name'])?></h2>
-    <p><?=htmlspecialchars($product['description'])?></p>
-    <p><strong>Price: $<?=number_format($product['price'],2)?></strong></p>
-    
-    <form method="post" class="mt-3">
-      <div class="mb-3">
-        <label for="quantity" class="form-label">Quantity</label>
-        <input type="number" name="quantity" class="form-control" id="quantity" min="1" value="1">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow-lg rounded-4">
+          <div class="card-body">
+            <h3 class="card-title"><?=htmlspecialchars($product['name'])?></h3>
+            <p class="card-text"><?=htmlspecialchars($product['description'])?></p>
+            <h5 class="text-success mb-3">Price: $<?=number_format($product['price'],2)?></h5>
+
+            <div class="d-flex align-items-center mb-3">
+              <strong>Likes: <?= $product['likes'] ?></strong>
+              <a href="like.php?product_id=<?= $product['id'] ?>" class="btn btn-outline-success btn-sm ms-3">
+                ❤️ Like
+              </a>
+            </div>
+
+            <form method="post" class="mt-4 border-top pt-3">
+              <div class="mb-3">
+                <label for="quantity" class="form-label">Quantity</label>
+                <input type="number" name="quantity" class="form-control w-25" id="quantity" min="1" value="1">
+              </div>
+              <input type="hidden" name="price" value="<?= $product['price'] ?>">
+              <button type="submit" class="btn btn-primary">Add to Cart 🛒</button>
+            </form>
+          </div>
+        </div>
       </div>
-      <!-- hidden price field, easily tamperable -->
-      <input type="hidden" name="price" value="<?= $product['price'] ?>">
-      <button type="submit" class="btn btn-primary">Add to Cart</button>
-    </form>
+    </div>
   </div>
 
-      <?php include 'includes/footer.php'; ?>
+  <?php include 'includes/footer.php'; ?>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

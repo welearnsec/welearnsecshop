@@ -27,16 +27,18 @@ if ($keyword) {
     <h2>Product Search</h2>
     <form method="get" class="mb-3">
       <div class="input-group">
-        <input type="text" name="q" class="form-control" placeholder="Search products..." value="<?=htmlspecialchars($keyword)?>">
+        <input type="text" name="q" class="form-control" placeholder="Search products..." value="<?= $keyword ?>">
         <button class="btn btn-primary" type="submit">Search</button>
       </div>
     </form>
+    <?php if($keyword): ?>
+      <h4>Showing results for: <?= $keyword ?></h4>
+    <?php endif; ?>
     <?php if($results): ?>
-      <h4>Results:</h4>
-      <div class="list-group">
+      <div class="list-group mt-3">
         <?php foreach($results as $row): ?>
-          <a href="product.php?id=<?=$row['id']?>" class="list-group-item list-group-item-action">
-            <?=htmlspecialchars($row['name'])?> - $<?=htmlspecialchars($row['price'])?>
+          <a href="product.php?id=<?= $row['id'] ?>" class="list-group-item list-group-item-action">
+            <?= $row['name'] ?> - $<?= $row['price'] ?>
           </a>
         <?php endforeach; ?>
       </div>

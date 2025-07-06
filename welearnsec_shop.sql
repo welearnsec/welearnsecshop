@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 06, 2025 at 12:48 PM
+-- Generation Time: Jul 06, 2025 at 05:46 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -68,7 +68,16 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `product_id`, `quantity`, `total`, `status`, `created_at`) VALUES
-(1, 1, 2, 1, 49.99, 'pending', '2025-07-06 16:53:08');
+(1, 1, 2, 1, 49.99, 'pending', '2025-07-06 16:53:08'),
+(2, 3, 2, 1, 49.99, 'pending', '2025-07-06 22:57:26'),
+(3, 3, 2, 1, 49.99, 'pending', '2025-07-06 22:59:13'),
+(4, 3, 2, 1, 49.99, 'pending', '2025-07-06 23:00:24'),
+(5, 3, 1, 1, 19.99, 'pending', '2025-07-06 23:02:16'),
+(6, 3, 1, 1, 19.99, 'pending', '2025-07-06 23:06:13'),
+(7, 3, 1, 1, 19.99, 'pending', '2025-07-06 23:09:28'),
+(8, 3, 1, 1, 19.99, 'pending', '2025-07-06 23:11:46'),
+(9, 3, 1, 1, 19.99, 'pending', '2025-07-06 23:14:26'),
+(10, 3, 1, 1, 19.99, 'pending', '2025-07-06 23:21:41');
 
 -- --------------------------------------------------------
 
@@ -81,18 +90,19 @@ CREATE TABLE `products` (
   `name` varchar(100) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `price` decimal(10,2) DEFAULT NULL,
-  `stock` int(11) DEFAULT 0
+  `stock` int(11) DEFAULT 0,
+  `likes` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `description`, `price`, `stock`) VALUES
-(1, 'Red Shirt', 'Comfortable red cotton shirt', 19.99, 101),
-(2, 'Blue Jeans', 'Classic blue jeans', 49.99, 5),
-(3, 'Sneakers', 'White running sneakers', 69.99, 8),
-(4, 'test', 'test', 1.00, 1);
+INSERT INTO `products` (`id`, `name`, `description`, `price`, `stock`, `likes`) VALUES
+(1, 'Red Shirt', 'Comfortable red cotton shirt', 19.99, 101, 8),
+(2, 'Blue Jeans', 'Classic blue jeans', 49.99, 5, 24),
+(3, 'Sneakers', 'White running sneakers', 69.99, 8, 0),
+(4, 'test', 'test', 1.00, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -108,6 +118,13 @@ CREATE TABLE `reviews` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `reviews`
+--
+
+INSERT INTO `reviews` (`id`, `product_id`, `reviewer`, `comment`, `created_at`) VALUES
+(1, 2, 'test', 'test', '2025-07-06 10:59:47');
+
 -- --------------------------------------------------------
 
 --
@@ -119,17 +136,20 @@ CREATE TABLE `users` (
   `username` varchar(50) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
-  `role` enum('user','admin') DEFAULT 'user'
+  `role` enum('user','admin') DEFAULT 'user',
+  `reset_token` varchar(255) DEFAULT NULL,
+  `reset_token_expiry` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`) VALUES
-(1, 'admin', NULL, '21232f297a57a5a743894a0e4a801fc3', 'admin'),
-(2, 'user1', NULL, '5f4dcc3b5aa765d61d8327deb882cf99', 'user'),
-(3, 'test', NULL, '098f6bcd4621d373cade4e832627b4f6', 'user');
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `reset_token`, `reset_token_expiry`) VALUES
+(1, 'admin', 'admin@gmail.com', '21232f297a57a5a743894a0e4a801fc3', 'admin', NULL, NULL),
+(2, 'user1', 'test3@gmail.com', '5f4dcc3b5aa765d61d8327deb882cf99', 'user', NULL, NULL),
+(3, 'test', 'test2@gmail.com', '098f6bcd4621d373cade4e832627b4f6', 'user', NULL, NULL),
+(6, 'test123', 'test1@gmail.com', '5a105e8b9d40e1329780d62ea2265d8a', 'user', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -194,7 +214,7 @@ ALTER TABLE `logs`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -206,13 +226,13 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables

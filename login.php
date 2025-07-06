@@ -3,9 +3,11 @@ require_once 'includes/config.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
- // always start session here
 
 $message = "";
+
+// get next parameter from URL
+$next = $_GET['next'] ?? 'index.php';
 
 // handle login
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -15,14 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $hashed = md5($password);
 
     // intentionally vulnerable: raw SQL, no prepared statements
-
-$sql = "SELECT * FROM users WHERE (username = '$username' OR email = '$username') AND password = '$hashed'";
+    $sql = "SELECT * FROM users WHERE (username = '$username' OR email = '$username') AND password = '$hashed'";
     $result = $conn->query($sql);
 
     if ($result && $result->num_rows === 1) {
         $user = $result->fetch_assoc();
 
-        // you don't need password_verify here because we used MD5 match
         $_SESSION['username'] = $user['username'];
         $_SESSION['role'] = $user['role'];
         $_SESSION['user_id'] = $user['id'];
@@ -32,7 +32,8 @@ $sql = "SELECT * FROM users WHERE (username = '$username' OR email = '$username'
         if ($user['role'] === 'admin') {
             header("Location:admin/admin-users.php");
         } else {
-            header("Location: index.php");
+            // use vulnerable redirect
+            header("Location: redirect.php?url=" . urlencode($next));
         }
         exit;
     } else {
@@ -56,20 +57,19 @@ $sql = "SELECT * FROM users WHERE (username = '$username' OR email = '$username'
       <div class="alert alert-danger"><?= $message ?></div>
     <?php endif; ?>
     <form method="post">
-  <div class="mb-3">
-    <label for="username" class="form-label">Username/Email</label>
-    <input type="text" required name="username" class="form-control" id="username">
-  </div>
-  <div class="mb-3">
-    <label for="password" class="form-label">Password</label>
-    <input type="password" required name="password" class="form-control" id="password">
-  </div>
-  <div class="mb-3">
-    <a href="reset.php">Forgot your password?</a>
-  </div>
-  <button type="submit" class="btn btn-primary">Login</button>
-</form>
-
+      <div class="mb-3">
+        <label for="username" class="form-label">Username/Email</label>
+        <input type="text" required name="username" class="form-control" id="username">
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" required name="password" class="form-control" id="password">
+      </div>
+      <div class="mb-3">
+        <a href="reset.php">Forgot your password?</a>
+      </div>
+      <button type="submit" class="btn btn-primary">Login</button>
+    </form>
   </div>
 
   <?php include 'includes/footer.php'; ?>

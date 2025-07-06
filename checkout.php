@@ -48,9 +48,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <div class="container mt-5">
     <h2>Checkout</h2>
     <?php if($message): ?>
-      <div class="alert alert-success"><?= $message ?></div>
-      <a href="index.php" class="btn btn-primary">Return to Shop</a>
-    <?php else: ?>
+  <div class="alert alert-success"><?= $message ?></div>
+  <p>You can download your invoice below:</p>
+  <a href="download_invoice.php?file=invoice1.pdf" class="btn btn-warning">Download Invoice (PDF)</a>
+
+  <a href="index.php" class="btn btn-primary mt-2">Return to Shop</a>
+<?php else: ?>
+
       <?php if(empty($_SESSION['cart'])): ?>
         <div class="alert alert-info">Your cart is empty.</div>
         <a href="index.php" class="btn btn-secondary">Back to Shop</a>
